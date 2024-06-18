@@ -1,0 +1,4 @@
+http:
+  async:
+    webclient:
+      base-url: http://localhost:${wiremock.server.port}
