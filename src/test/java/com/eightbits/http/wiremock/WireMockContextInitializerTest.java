@@ -1,23 +1,18 @@
 package com.eightbits.http.wiremock;
 
-import com.eightbits.http.wiremock.initializer.WireMockContextInitializer;
+import com.eightbits.http.context.ContextInitializer;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.assertj.AssertableApplicationContext;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertySource;
-import org.springframework.core.io.support.ResourcePropertySource;
 
-import java.io.IOException;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WireMockInitializerTest {
-
+class WireMockContextInitializerTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner();
 
 
@@ -38,21 +33,13 @@ class WireMockInitializerTest {
     void wiremock_endpoint_should_be_represented_in_the_properties() {
         this.contextRunner
                 .withInitializer(new WireMockContextInitializer())
-                .withInitializer(this::loadTestProperties).run(context -> {
+                .withInitializer(ContextInitializer::loadTestProperties).run(context -> {
                     assertThat(context.getEnvironment().getProperty("http.async.webclient.base-url")).isNotNull();
                     assertThat(context.getEnvironment().getProperty("http.async.webclient.base-url")).matches("http://localhost:\\d+");
                 });
     }
 
-    private void loadTestProperties(ConfigurableApplicationContext applicationContext) {
-        try {
-            GenericApplicationContext genericContext = (GenericApplicationContext) applicationContext;
-            genericContext.getEnvironment().getPropertySources()
-                    .addFirst(new ResourcePropertySource("classpath:application-test.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load properties from application-test.properties", e);
-        }
-    }
+
 
     private void printProperties(AssertableApplicationContext context) {
         // Get the environment
