@@ -29,7 +29,7 @@ public class WebClientConfigurationProperties {
         }
     }
 
-    private String baseUrl;
+    private String baseUrl = "http://localhost:8080";
     private HttpCompression compression;
     private String apiKey;
 
