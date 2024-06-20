@@ -4,11 +4,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "http.async.webclient")
 public class WebClientConfigurationProperties {
+    public static final String GZIP = "gzip";
+    public static final String DEFLATE = "deflate";
+    public static final String BROTLI = "br";
 
     public static class HttpCompression {
-        public static final String GZIP = "gzip";
-        public static final String DEFLATE = "deflate";
-
         private Boolean enabled = true;
         private String algorithm = GZIP;
 
